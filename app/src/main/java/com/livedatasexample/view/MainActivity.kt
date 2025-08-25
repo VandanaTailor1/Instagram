@@ -28,6 +28,7 @@ import androidx.navigation.createGraph
 import com.livedatasexample.model.NavigationResponse
 import com.livedatasexample.ui.theme.LiveDatasExampleTheme
 import com.livedatasexample.utils.Screen
+import com.livedatasexample.view.profilestabs.PostLongClickPreviewScreen
 import com.livedatasexample.viewmodel.MemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -59,7 +60,8 @@ class MainActivity : ComponentActivity() {
                             HomeScreen()
                         }
                         composable(route = Screen.Post.route) {
-                            PostPreview()
+//                            PostPreview()
+                            PostLongClickPreviewScreen()
                         }
                         composable(route = Screen.Feed.route) {
                             CartScreen()

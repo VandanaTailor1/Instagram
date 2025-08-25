@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -27,10 +28,15 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,10 +46,11 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.livedatasexample.R
 import com.livedatasexample.view.FinalPostPreview
+import com.livedatasexample.view.dialoge.PostDailoge
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-@Preview(showSystemUi = true)
+
 fun PostView() {
     val listPost = mutableListOf(
         "https://i.pinimg.com/236x/56/61/22/56612276626e05af64de9649723982f2.jpg",
@@ -78,6 +85,7 @@ fun PostView() {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable()
 fun ListMyPost(url : String) {
+    var showDialog = remember { mutableStateOf(false) }
     Box {
         GlideImage(
             model = Any(),
@@ -85,7 +93,15 @@ fun ListMyPost(url : String) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(180.dp)
-                .clickable { Log.d("123456", "ListMyPost: ") }
+                .clickable(
+                ) { Log.d("123456", "ListMyPost: ") }
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onLongPress = {
+                            showDialog.value = true
+                        }
+                    )
+                }
             ,
             contentScale = ContentScale.Crop
         ) {
@@ -103,6 +119,12 @@ fun ListMyPost(url : String) {
                 .padding(top = 3.dp)
         )
     }
-
-
+    if (showDialog.value) {
+        PostDailoge(
+            onDismissRequest = { showDialog.value = false },
+            onConfirmation = { /* do something */ },
+            painter = painterResource(id = R.drawable.img_dummy),
+            imageDescription = url
+        )
+    }
 }

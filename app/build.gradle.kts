@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.livedatasexample"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.livedatasexample"
@@ -79,7 +79,8 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
 
-    implementation ("androidx.activity:activity-ktx:1.10.1")
+    implementation (libs.androidx.activity.ktx)
+    implementation (libs.custom.progress.bar.in1.compose)
 
 }
 
