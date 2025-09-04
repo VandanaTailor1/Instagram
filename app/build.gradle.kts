@@ -82,5 +82,6 @@ dependencies {
     implementation (libs.androidx.activity.ktx)
     implementation (libs.custom.progress.bar.in1.compose)
 
+    implementation("network.chaintech:sdp-ssp-compose-multiplatform:1.0.6")
 }
 

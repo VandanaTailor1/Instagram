@@ -22,7 +22,7 @@ fun NavGraph(
      NavHost(navController = navHostController ,
          startDestination = Screen.Home.route) {
          composable (route = Screen.Home.route) {
-             HomeScreen()
+             //HomeScreen()
          }
      }
 }
@@ -38,7 +38,7 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(ProfileTabsScreen.Post.route) { PostView() }
-        composable(ProfileTabsScreen.Reels.route) { HomeScreen() }
-        composable(ProfileTabsScreen.Tags.route) { PostPreview() }
+        composable(ProfileTabsScreen.Reels.route) { PostView() }
+        composable(ProfileTabsScreen.Tags.route) { PostView() }
     }
 }

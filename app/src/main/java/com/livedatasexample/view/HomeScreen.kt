@@ -1,8 +1,11 @@
 package com.livedatasexample.view
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +28,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,29 +44,51 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.livedatasexample.R
 import com.livedatasexample.model.Meme
 import com.livedatasexample.model.StoriesResponse
 import com.livedatasexample.ui.theme.LiveDatasExampleTheme
+import com.livedatasexample.utils.ApiResponseCallBack
+import com.livedatasexample.viewmodel.MemeViewModel
+import kotlinx.coroutines.launch
+import network.chaintech.sdpcomposemultiplatform.ssp
 
 //HomeScreen.kt
 @Composable
-fun HomeScreen(){
+fun HomeScreen(viewModel: MemeViewModel , context: Context){
     Box (modifier = Modifier
         .fillMaxSize()
         .background(Color.Black)
     ){
-        GreetingPreview()
+        val dataDogss by viewModel.dataDogs.collectAsState()
+        LaunchedEffect(dataDogss){
+            when (val state = dataDogss) {
+                is ApiResponseCallBack.Error -> {
+                    Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is ApiResponseCallBack.Loading -> {
+                    Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
+                }
+
+                is ApiResponseCallBack.Success -> {
+                    Toast.makeText(context, state.data.status, Toast.LENGTH_SHORT).show()
+                }
+
+                null -> {}
+            }
+        }
+        GreetingPreview(viewModel , context)
     }
 }
 
-@Preview
 @Composable
-fun GreetingPreview() {
+fun GreetingPreview(viewModel: MemeViewModel , context: Context) {
         Column {
-            HeaderUI()
+            HeaderUI(viewModel)
             StoriesRecycle()
             FinalPostRecycle()
         }
@@ -69,13 +98,13 @@ fun GreetingPreview() {
 fun FinalPostRecycle() {
     var stories: MutableList<StoriesResponse>
     stories = mutableListOf(
-        StoriesResponse(userName = "v_tailor", userProfile = ""),
-        StoriesResponse(userName = "siya", userProfile = ""),
-        StoriesResponse(userName = "kiara", userProfile = ""),
-        StoriesResponse(userName = "amaya", userProfile = ""),
-        StoriesResponse(userName = "amaya", userProfile = ""),
-        StoriesResponse(userName = "shreya", userProfile = ""),
-        StoriesResponse(userName = "rohini", userProfile = "")
+        StoriesResponse(userName = "v_tailor", userProfile =  "https://cdn.magicdecor.in/com/2023/09/29155714/Krishna-wallpaper-for-Home.jpg"),
+        StoriesResponse(userName = "siya", userProfile = "https://images.meesho.com/images/products/462242032/lbowb_512.jpg"),
+        StoriesResponse(userName = "kiara", userProfile = "https://i.pinimg.com/736x/e4/f9/a2/e4f9a25af2f049e23e8ccb1c0aa03b0d.jpg"),
+        StoriesResponse(userName = "amaya", userProfile = "https://i.pinimg.com/736x/ef/5d/c5/ef5dc54ca08475e7b9bc8926559a0e56.jpg"),
+        StoriesResponse(userName = "amaya", userProfile = "https://www.shutterstock.com/image-vector/baby-krishna-sits-lotus-position-600nw-2575481507.jpg"),
+        StoriesResponse(userName = "shreya", userProfile = "https://5.imimg.com/data5/SELLER/Default/2024/8/443487636/II/EX/AE/8494182/61boquzrspl-ac-uf1000-1000-ql80-500x500.jpg"),
+        StoriesResponse(userName = "rohini", userProfile = "https://5.imimg.com/data5/SELLER/Default/2025/4/506398052/MQ/CE/KQ/223567909/glossy-multicolor-radha-krishna-new-modern-500x500.jpeg")
     )
     LazyColumn {
         items(stories) {
@@ -107,14 +136,21 @@ fun ListItems(data: Meme) {
 }
 
 @Composable
-fun HeaderUI() {
+fun HeaderUI(viewModel: MemeViewModel) {
+    val scope = rememberCoroutineScope()
     Row(modifier = Modifier.padding(10.dp)) {
         Text(
             text = stringResource(R.string.app_name),
             color = Color.White,
             fontStyle = FontStyle.Italic,
-            fontSize = 20.sp,
+            fontSize = 15.ssp,
             modifier = Modifier.weight(1F)
+                .clickable {
+                   scope.launch {
+                      viewModel.getDataDogs()
+                    //   viewModel.getMeme(1 , 20)
+                   }
+                }
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -137,13 +173,13 @@ fun HeaderUI() {
 fun StoriesRecycle() {
     var stories: MutableList<StoriesResponse>
     stories = mutableListOf(
-        StoriesResponse(userName = "v_tailor", userProfile = ""),
-        StoriesResponse(userName = "siya", userProfile = ""),
-        StoriesResponse(userName = "kiara", userProfile = ""),
-        StoriesResponse(userName = "amaya", userProfile = ""),
-        StoriesResponse(userName = "amaya", userProfile = ""),
-        StoriesResponse(userName = "shreya", userProfile = ""),
-        StoriesResponse(userName = "rohini", userProfile = "")
+        StoriesResponse(userName = "v_tailor", userProfile =  "https://cdn.magicdecor.in/com/2023/09/29155714/Krishna-wallpaper-for-Home.jpg"),
+        StoriesResponse(userName = "siya", userProfile = "https://images.meesho.com/images/products/462242032/lbowb_512.jpg"),
+        StoriesResponse(userName = "kiara", userProfile = "https://i.pinimg.com/736x/e4/f9/a2/e4f9a25af2f049e23e8ccb1c0aa03b0d.jpg"),
+        StoriesResponse(userName = "amaya", userProfile = "https://i.pinimg.com/736x/ef/5d/c5/ef5dc54ca08475e7b9bc8926559a0e56.jpg"),
+        StoriesResponse(userName = "amaya", userProfile = "https://www.shutterstock.com/image-vector/baby-krishna-sits-lotus-position-600nw-2575481507.jpg"),
+        StoriesResponse(userName = "shreya", userProfile = "https://5.imimg.com/data5/SELLER/Default/2024/8/443487636/II/EX/AE/8494182/61boquzrspl-ac-uf1000-1000-ql80-500x500.jpg"),
+        StoriesResponse(userName = "rohini", userProfile = "https://5.imimg.com/data5/SELLER/Default/2025/4/506398052/MQ/CE/KQ/223567909/glossy-multicolor-radha-krishna-new-modern-500x500.jpeg")
     )
     LazyRow {
         items(stories) {
@@ -166,23 +202,20 @@ fun Stories(stories: StoriesResponse) {
             modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 5.dp)
         ) {
             GlideImage(
-                model = Any(),
+                model = stories.userProfile,
                 contentDescription = stringResource(R.string.app_name),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(65.dp)
                     .fillMaxWidth()
 
-            ) {
-                it
-                    .load(R.drawable.icon_chat)
-            }
+            )
         }
         Text(
             text = stories.userName,
             color = Color.White,
             fontStyle = FontStyle.Normal,
-            fontSize = 15.sp,
+            fontSize = 12.ssp,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
@@ -212,15 +245,12 @@ fun PostPreview() {
                 border = BorderStroke(1.dp, color = Color.Red)
             ) {
                 GlideImage(
-                    model = Any(),
+                    model = Any() ,
                     contentDescription = stringResource(R.string.app_name),
                     modifier = Modifier
                         .size(60.dp)
                         .fillMaxWidth()
-                ) {
-                    it
-                        .load(R.drawable.icon_chat)
-                }
+                )
             }
 
             Column(
@@ -228,10 +258,10 @@ fun PostPreview() {
                 modifier = Modifier.padding(10.dp, 1.dp, 5.dp),
             ) {
                 Text(
-                    text = "userName",
+                    text =  "username",
                     color = Color.White,
                     fontStyle = FontStyle.Normal,
-                    fontSize = 15.sp
+                    fontSize = 12.ssp
                 )
                 Text(
                     text = "Indore",
@@ -286,18 +316,14 @@ fun PostContent(stories: StoriesResponse) {
 //    )
     //  {
     GlideImage(
-        model = Any(),
+        model = stories.userProfile,
         contentDescription = stringResource(R.string.app_name),
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .fillMaxWidth()
             .height(350.dp)
             .padding(0.dp, 5.dp)
-    ) {
-        it
-            .load(R.drawable.img_dummy)
-    }
-    //  }
+    )
 
 }
 

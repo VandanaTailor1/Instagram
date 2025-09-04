@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.livedatasexample.model.DogsResponse
 import com.livedatasexample.model.Meme
 import com.livedatasexample.model.MemeResponse
 import com.livedatasexample.model.PhotosResponse
@@ -29,5 +30,15 @@ class MemeViewModel @Inject constructor(private val memeRepository: MemeReposito
                  _meme.value = it
              }
        }
+    }
+
+    private val _dataDogs = MutableStateFlow<ApiResponseCallBack<DogsResponse>?>(null)
+    val dataDogs : StateFlow<ApiResponseCallBack<DogsResponse>?> =_dataDogs
+
+    fun getDataDogs() {
+        viewModelScope.launch {
+            memeRepository.getDogs()
+            Log.d("12345", "getDataDogs: ")
+        }
     }
 }

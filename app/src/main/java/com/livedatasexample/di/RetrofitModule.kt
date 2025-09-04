@@ -15,7 +15,8 @@ object RetrofitModule {
 
     @Provides
     //fun baseUrl(): String = "https://meme-api.com/"
-    fun baseUrl(): String = "https://jsonplaceholder.typicode.com/"
+   // fun baseUrl(): String = "https://jsonplaceholder.typicode.com/"
+    fun baseUrl(): String = "https://dog.ceo/api/breeds/image/"
 
     @Provides
     @Singleton

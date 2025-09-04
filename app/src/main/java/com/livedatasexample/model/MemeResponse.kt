@@ -4,6 +4,7 @@ data class MemeResponse(
     val count: Int,
     val memes: List<Meme>
 )
+
 data class Meme(
     val author: String,
     val nsfw: Boolean,
@@ -16,10 +17,15 @@ data class Meme(
     val url: String
 )
 
-data class PhotosResponse (
-    val albumId : Int,
-    val id : Int,
+data class PhotosResponse(
+    val albumId: Int,
+    val id: Int,
     val title: String,
     val url: String,
-    val thumbnailUrl : String
+    val thumbnailUrl: String
+)
+
+data class DogsResponse(
+    val message: String,
+    val status: String
 )

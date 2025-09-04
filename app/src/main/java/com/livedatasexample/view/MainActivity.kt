@@ -29,6 +29,7 @@ import com.livedatasexample.model.NavigationResponse
 import com.livedatasexample.ui.theme.LiveDatasExampleTheme
 import com.livedatasexample.utils.Screen
 import com.livedatasexample.view.profilestabs.PostLongClickPreviewScreen
+import com.livedatasexample.view.search.SearchScreen
 import com.livedatasexample.viewmodel.MemeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -54,17 +55,17 @@ class MainActivity : ComponentActivity() {
 
                     val graph = navController.createGraph(startDestination = Screen.Home.route) {
                         composable(route = Screen.Search.route) {
-                            SettingScreen()
+                            SearchScreen()
                         }
                         composable(route = Screen.Home.route) {
-                            HomeScreen()
+                            HomeScreen(memeViewModel , this@MainActivity)
                         }
                         composable(route = Screen.Post.route) {
 //                            PostPreview()
                             PostLongClickPreviewScreen()
                         }
                         composable(route = Screen.Feed.route) {
-                            CartScreen()
+                            SettingScreen()
                         }
                         composable(route = Screen.Profile.route) {
                             ProfileScreen()
